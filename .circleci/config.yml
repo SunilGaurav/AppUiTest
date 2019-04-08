@@ -16,6 +16,9 @@ jobs:
       - run:
           name: Download Dependencies
           command: ./gradlew androidDependencies
+      -run:
+          name: Accept SDK license
+          command: yes | $ANDROID_HOME/tools/bin/sdkmanager --licenses || if [ $? -ne '141' ]; then exit $?; fi;  #Captures SIGPIPE 141 error but still allow repeating "y" to accept all licenses
       - save_cache:
           paths:
             - ~/.gradle
