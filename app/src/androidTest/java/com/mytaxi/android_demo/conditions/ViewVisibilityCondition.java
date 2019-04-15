@@ -1,21 +1,20 @@
-package com.mytaxi.android_demo.IdlingResource;
+package com.mytaxi.android_demo.conditions;
 
-import android.app.Activity;
-import android.app.DialogFragment;
-import android.support.test.InstrumentationRegistry;
 import android.support.test.espresso.NoMatchingViewException;
-import android.support.test.espresso.ViewAssertion;
 import android.support.test.espresso.ViewInteraction;
 
-import com.mytaxi.android_demo.R;
+import com.mytaxi.android_demo.ConditionWatcher.ConditionWatcher;
+import com.mytaxi.android_demo.ConditionWatcher.Instruction;
 
-import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
-import static android.support.test.espresso.matcher.ViewMatchers.withId;
 
-public class ButtonVisibleConditionInstruction {
-    public static ViewInteraction waitForElementIsDisplayed(final ViewInteraction interaction, final int timeout) throws Exception {
+/*
+Class to check if the visibility condition for particular view are met
+ */
+public class ViewVisibilityCondition {
+    public static ViewInteraction waitForElementIsDisplayed(final ViewInteraction interaction,
+                                                            final int timeout) throws Exception {
 
         ConditionWatcher.setTimeoutLimit(timeout);
         ConditionWatcher.waitForCondition(new Instruction() {

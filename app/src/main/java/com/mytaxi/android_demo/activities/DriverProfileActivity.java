@@ -53,7 +53,7 @@ public class DriverProfileActivity extends AppCompatActivity {
         ImageView imageViewAvatar = findViewById(R.id.imageViewDriverAvatar);
         TextView textViewLocation = findViewById(R.id.textViewDriverLocation);
         TextView textViewDate = findViewById(R.id.textViewDriverDate);
-        FloatingActionButton fab = findViewById(R.id.fab);
+        FloatingActionButton fab = findViewById(R.id.call_fab);
 
         textViewName.setText(driver.getName());
         GlideApp.with(this).load(driver.getAvatar()).placeholder(R.drawable.ic_driver).apply(RequestOptions.circleCropTransform()).into(imageViewAvatar);

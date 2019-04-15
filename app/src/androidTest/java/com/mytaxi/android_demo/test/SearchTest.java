@@ -1,12 +1,12 @@
-package com.mytaxi.android_demo;
+package com.mytaxi.android_demo.test;
 
 import android.content.Intent;
 import android.support.test.espresso.NoMatchingViewException;
-import android.support.test.espresso.ViewInteraction;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
 
-import com.mytaxi.android_demo.ConditionWatcher.ButtonVisibleConditionInstruction;
+import com.mytaxi.android_demo.InstrumentationBase;
+import com.mytaxi.android_demo.conditions.ViewVisibilityCondition;
 import com.mytaxi.android_demo.activities.MainActivity;
 
 import junit.framework.Assert;
@@ -25,9 +25,10 @@ import static android.support.test.espresso.matcher.RootMatchers.withDecorView;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
-import static com.mytaxi.android_demo.InstrumentationBase.fillLoginDetails;
-import static com.mytaxi.android_demo.InstrumentationBase.isLoggedIn;
+import static com.mytaxi.android_demo.InstrumentationBase.fill_login_details;
 import static com.mytaxi.android_demo.InstrumentationBase.searchEditText;
+import static com.mytaxi.android_demo.Utils.doesResourceIdExist;
+import static com.mytaxi.android_demo.Utils.isLoggedIn;
 import static org.hamcrest.core.IsNot.not;
 
 @RunWith(AndroidJUnit4.class)
@@ -38,38 +39,40 @@ public class SearchTest {
 
     @Before
     public void setUp() throws Exception {
-        if (!InstrumentationBase.isLoggedIn()){
-            fillLoginDetails(InstrumentationBase.VALID_USER_NAME, InstrumentationBase.VALID_PASSWORD);
-            ButtonVisibleConditionInstruction.waitForElementIsDisplayed(searchEditText,0);
+        InstrumentationBase.initialize();
+        if (!isLoggedIn(InstrumentationBase.callfab)) {
+            fill_login_details(InstrumentationBase.VALID_USER_NAME, InstrumentationBase.VALID_PASSWORD);
+            ViewVisibilityCondition.waitForElementIsDisplayed(searchEditText, 0);
         }
     }
 
     @Test
-    public void test_Search_Then_Call_Button() throws NoMatchingViewException {
+    public void test_search_then_call_button() {
         try {
-
+         //Putting sleep to handle the code issue where search was failing due to some internal operation
             Thread.sleep(2000);
             InstrumentationBase.searchEditText.perform(click());
             searchEditText.perform(typeText(InstrumentationBase.NAME_TO_BE_SEARCHED));
             onView(withText(InstrumentationBase.NAME_TO_BE_SELECTED)).inRoot(withDecorView(not(mMainActivityRule.getActivity().getWindow().getDecorView()))).check(matches(isDisplayed())).perform(click());
-            if (InstrumentationBase.doesResourceIdExist(InstrumentationBase.searchScreenFab)){
-                onView(withId(InstrumentationBase.searchScreenFab)).perform(click());
+            if (doesResourceIdExist(InstrumentationBase.callfab)) {
+                onView(withId(InstrumentationBase.callfab)).perform(click());
             } else {
                 Assert.fail("Test failed");
             }
         } catch (NoMatchingViewException exception) {
             Assert.fail();
         } catch (InterruptedException e) {
+            Assert.fail();
             e.printStackTrace();
         } catch (Exception e) {
+            Assert.fail();
             e.printStackTrace();
         }
     }
 
     @After
-    public void tearDown() {
+    public void clear() {
         mMainActivityRule.launchActivity(new Intent(mMainActivityRule.getActivity().getApplicationContext(), MainActivity.class));
-
         InstrumentationBase.logout();
     }
 }

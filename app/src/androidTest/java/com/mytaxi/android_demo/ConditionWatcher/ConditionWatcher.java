@@ -1,5 +1,8 @@
 package com.mytaxi.android_demo.ConditionWatcher;
 
+/*
+It synchronizes operations that might occur on any thread - with test thread
+ */
 public class ConditionWatcher {
 
     public static final int CONDITION_NOT_MET = 0;
@@ -47,12 +50,7 @@ public class ConditionWatcher {
             throw new Exception(instruction.getDescription() + " - took more than " + getInstance().timeoutLimit / 1000 + " seconds. Test stopped.");
     }
 
-    public static void setWatchInterval(int watchInterval) {
-        getInstance().watchInterval = watchInterval;
-    }
-
     public static void setTimeoutLimit(int ms) {
-
         if (ms > 0) {
             getInstance().timeoutLimit = ms;
         } else {
